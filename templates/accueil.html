@@ -12,23 +12,11 @@
     <title>OpenLayers example</title>
   </head>
   <body>
-    <h2>My Map</h2>
+    <h2>ISS current position</h2>
     <div id="map" class="map"></div>
-    <script type="text/javascript">
-      var lon = -71.06;
-      var lat = 48.42;
-      var map = new ol.Map({
-        target: 'map',
-        layers: [
-          new ol.layer.Tile({
-            source: new ol.source.OSM()
-          })
-        ],
-        view: new ol.View({
-          center: ol.proj.fromLonLat([lon, lat]),
-          zoom: 10
-        })
-      });
-    </script>
+    <input type="hidden" id="issLon" name="issLon" value="{{ issLon }}">
+    <input type="hidden" id="issLat" name="issLat" value="{{ issLat }}">
+
+    <script src="/static/scripts/openLayers.js"></script>
   </body>
 </html>
