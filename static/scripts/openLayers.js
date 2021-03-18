@@ -31,3 +31,11 @@ var map = new ol.Map({
         zoom: 4
     })
 });
+
+map.on('pointermove', function(evt) {
+   var coords = ol.proj.toLonLat(evt.coordinate);
+   var lat  = coords[1].toFixed(2);
+   var lon = coords[0].toFixed(2);
+   var locTxt = "Latitude: " + lat + " Longitude: " + lon;
+   document.getElementById('coords').innerHTML = locTxt;
+});
