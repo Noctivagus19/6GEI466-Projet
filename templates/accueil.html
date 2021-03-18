@@ -12,11 +12,19 @@
     <title>OpenLayers example</title>
   </head>
   <body>
-    <h2>ISS current position</h2>
+    <h2>ISS current position above the Earth</h2>
     <div id="map" class="map"></div>
+    <div id="coords">Latitude:  Longitude:</div>
     <input type="hidden" id="issLon" name="issLon" value="{{ issLon }}">
     <input type="hidden" id="issLat" name="issLat" value="{{ issLat }}">
 
+
+    There is currently <strong>{{ astros|length }} astronauts</strong> in the International Space Station:
+    <ul>
+      {% for astro in astros %}
+      <li><a href="{{ astro.wiki_page.url }}">{{ astro.wiki_page.snippet|safe }}...</a></li>
+      {% endfor %}
+    </ul>
     <script src="/static/scripts/openLayers.js"></script>
   </body>
 </html>
