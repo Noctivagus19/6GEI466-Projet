@@ -58,3 +58,11 @@ def search_wikipedia(term):
         wiki_page['snippet'] = first_result['snippet']
 
     return wiki_page
+
+@app.route('/position/', methods=['GET'])
+def geoloc():
+    return render_template('position.html')
+
+
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port='5000', debug=True)
