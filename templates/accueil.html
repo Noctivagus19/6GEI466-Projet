@@ -18,11 +18,13 @@
     <input type="hidden" id="issLon" name="issLon" value="{{ issLon }}">
     <input type="hidden" id="issLat" name="issLat" value="{{ issLat }}">
 
-    <p>
+
     <label for="track">
       Afficher ma position
       <input id="track" type="checkbox"/>
-    </label>
+     </label> Latitude : <code id="latMyPosition"></code>&nbsp;&nbsp;
+     </label> Longitude : <code id="lonMyPosition"></code>
+      <p>
       position accuracy : <code id="accuracy"></code>&nbsp;&nbsp;
       altitude : <code id="altitude"></code>&nbsp;&nbsp;
       altitude accuracy : <code id="altitudeAccuracy"></code>&nbsp;&nbsp;
