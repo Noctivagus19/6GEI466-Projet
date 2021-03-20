@@ -2,6 +2,9 @@ from flask import Flask, render_template
 import json
 import urllib3
 import urllib
+from ip2geotools.databases.noncommercial import DbIpCity
+from requests import get
+from datetime import datetime
 from urllib.parse import urlencode, quote_plus
 
 app = Flask(__name__)
@@ -26,11 +29,24 @@ def index():
             astro['wiki_page'] = search_wikipedia(astro['name'])
             iss_astronauts.append(astro)
 
+    # ISS Pass times
+    myIp = get('https://api.ipify.org').text
+    infoIp = DbIpCity.get(myIp, api_key='free')
+    myLocation = infoIp.city + ', ' + infoIp.region + ', ' + infoIp.country
+    r = http.request('GET', 'http://api.open-notify.org/iss-pass.json?lat='+str(infoIp.latitude)+'&lon='+str(infoIp.longitude)+'')
+    obj = json.loads(r.data)
+    iss_risetimes = []
+    for response in obj["response"]:
+        print(response)
+        iss_risetimes.append(datetime.fromtimestamp(response['risetime']))
+
     return render_template(
         'accueil.html',
         issLon=longitude,
         issLat=latitude,
         astros=iss_astronauts,
+        issRisetimes=iss_risetimes,
+        infoLocation=myLocation
     )
 
 

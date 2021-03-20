@@ -38,6 +38,15 @@
       <li><a href="{{ astro.wiki_page.url }}">{{ astro.wiki_page.snippet|safe }}...</a></li>
       {% endfor %}
     </ul>
+
+    {% if issRisetimes %}
+        Votre position géographique: {{ infoLocation }}<br>
+        La station ISS passera au dessus de votre position géographique dans les moment suivants: <br>
+        {% for risetime in issRisetimes %}
+        <li><span>{{ risetime|safe }}...</span></li>
+        {% endfor %}
+    {% endif %}
+
     <script src="/static/scripts/openLayers.js"></script>
     <script type="module" src="/static/scripts/geoloc.js"></script>
   </body>
