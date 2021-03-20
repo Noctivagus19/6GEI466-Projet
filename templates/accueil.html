@@ -18,7 +18,17 @@
     <input type="hidden" id="issLon" name="issLon" value="{{ issLon }}">
     <input type="hidden" id="issLat" name="issLat" value="{{ issLat }}">
 
-
+    <p>
+    <label for="track">
+      Afficher ma position
+      <input id="track" type="checkbox"/>
+    </label>
+      position accuracy : <code id="accuracy"></code>&nbsp;&nbsp;
+      altitude : <code id="altitude"></code>&nbsp;&nbsp;
+      altitude accuracy : <code id="altitudeAccuracy"></code>&nbsp;&nbsp;
+      heading : <code id="heading"></code>&nbsp;&nbsp;
+      speed : <code id="speed"></code>
+      </p>
 
     There is currently <strong>{{ astros|length }} astronauts</strong> in the International Space Station:
     <ul>
@@ -27,5 +37,6 @@
       {% endfor %}
     </ul>
     <script src="/static/scripts/openLayers.js"></script>
+    <script type="module" src="/static/scripts/geoloc.js"></script>
   </body>
 </html>

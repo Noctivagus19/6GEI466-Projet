@@ -3,6 +3,15 @@ var view = new ol.View({
   zoom: 2,
 });
 
+var map = new ol.Map({
+  layers: [
+    new ol.layer.Tile({
+      source: new ol.source.OSM(),
+    }) ],
+  target: 'map',
+  view: view,
+});
+
 var geolocation = new ol.Geolocation({
   // enableHighAccuracy must be set to true to have the heading value.
   trackingOptions: {
@@ -17,6 +26,7 @@ function el(id) {
 
 el('track').addEventListener('change', function () {
   geolocation.setTracking(this.checked);
+  alert(geolocation.getPosition());
 });
 
 // update the HTML page when the position changes.
