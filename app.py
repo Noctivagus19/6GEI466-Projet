@@ -5,6 +5,8 @@ from flask import (
 
 import json
 import urllib3
+import urllib
+from urllib.parse import urlencode, quote_plus
 from ip2geotools.databases.noncommercial import DbIpCity
 from requests import get
 from datetime import datetime
@@ -36,7 +38,7 @@ def index():
 
     r = http.request('GET', '127.0.0.1:8080/api/v1/iss/astronauts')
     iss_astronauts = json.loads(r.data)
-    iss_astronauts = []
+
     for astro in obj["people"]:
         if astro["craft"] == 'ISS':
             astro['wiki_page'] = search_wikipedia(astro['name'])
@@ -56,32 +58,6 @@ def index():
 def geoloc():
     return render_template('position.html')
 
-
-@app.route('/', methods=['GET'])
-def index():
-    http = urllib3.PoolManager()
-
-    # Where is the ISS now
-    r = http.request('GET', 'http://api.open-notify.org/iss-now.json')
-    obj = json.loads(r.data)
-    longitude = obj['iss_position']['longitude']
-    latitude = obj['iss_position']['latitude']
-
-    # Who are in space right now
-    r = http.request('GET', 'http://api.open-notify.org/astros.json')
-    obj = json.loads(r.data)
-    iss_astronauts = []
-    for astro in obj["people"]:
-        if astro["craft"] == 'ISS':
-            astro['wiki_page'] = search_wikipedia(astro['name'])
-            iss_astronauts.append(astro)
-
-    return render_template(
-        'accueil.html',
-        issLon=longitude,
-        issLat=latitude,
-        astros=iss_astronauts,
-    )
 
 
 def search_wikipedia(term):
