@@ -19,12 +19,35 @@
     <input type="hidden" id="issLat" name="issLat" value="{{ issLat }}">
 
 
+    <label for="track">
+      Afficher ma position
+      <input id="track" type="checkbox"/>
+     </label> Latitude : <code id="latMyPosition"></code>&nbsp;&nbsp;
+     </label> Longitude : <code id="lonMyPosition"></code>
+      <p>
+      position accuracy : <code id="accuracy"></code>&nbsp;&nbsp;
+      altitude : <code id="altitude"></code>&nbsp;&nbsp;
+      altitude accuracy : <code id="altitudeAccuracy"></code>&nbsp;&nbsp;
+      heading : <code id="heading"></code>&nbsp;&nbsp;
+      speed : <code id="speed"></code>
+      </p>
+
     There is currently <strong>{{ astros|length }} astronauts</strong> in the International Space Station:
     <ul>
       {% for astro in astros %}
       <li><a href="{{ astro.wiki_page.url }}">{{ astro.wiki_page.snippet|safe }}...</a></li>
       {% endfor %}
     </ul>
+
+    {% if issRisetimes %}
+        Votre position géographique: {{ infoLocation }}<br>
+        La station ISS passera au dessus de votre position géographique dans les moment suivants: <br>
+        {% for risetime in issRisetimes %}
+        <li><span>{{ risetime|safe }}...</span></li>
+        {% endfor %}
+    {% endif %}
+
     <script src="/static/scripts/openLayers.js"></script>
+    <script type="module" src="/static/scripts/geoloc.js"></script>
   </body>
 </html>
