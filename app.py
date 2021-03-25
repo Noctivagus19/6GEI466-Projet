@@ -56,5 +56,20 @@ def search_wikipedia(term):
         page_title = str.replace(first_result['title'], ' ', '_')
         wiki_page['url'] = f'https://en.wikipedia.org/wiki/{page_title}'
         wiki_page['snippet'] = first_result['snippet']
+        page_id = str(first_result["pageid"])
+        payload = {
+        'action': 'query',
+        'prop': 'pageimages',
+        'titles': first_result['title'],
+        'format': 'json',
+        'pithumbsize': 200,
+        }
+        payload = urlencode(payload, quote_via=urllib.parse.quote)
+        wiki_url = 'http://en.wikipedia.org/'
+        link = f'{wiki_url}w/api.php?{payload}'
+        r = http.request('GET', link)
+        obj = json.loads(r.data)
+        if len(obj['query']['pages']) > 0:
+            wiki_page['image'] = obj['query']['pages'][page_id]['thumbnail']['source']
 
     return wiki_page
