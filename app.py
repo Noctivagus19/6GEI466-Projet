@@ -39,11 +39,6 @@ def index():
     r = http.request('GET', '127.0.0.1:8080/api/v1/iss/astronauts')
     iss_astronauts = json.loads(r.data)
 
-    for astro in iss_astronauts:
-        if astro["craft"] == 'ISS':
-            astro['wiki_page'] = search_wikipedia(astro['name'])
-            iss_astronauts.append(astro)
-
     return render_template(
         'accueil.html',
         issLon=longitude,
@@ -57,53 +52,6 @@ def index():
 @app.route('/position/', methods=['GET'])
 def geoloc():
     return render_template('position.html')
-
-
-def search_wikipedia(term):
-    http = urllib3.PoolManager()
-    payload = {
-        'action': 'query',
-        'list': 'search',
-        'prop': 'pageimages',
-        'srsearch': f'{term} astronaut',
-        'format': 'json',
-    }
-    payload = urlencode(payload, quote_via=urllib.parse.quote)
-    wiki_url = 'http://en.wikipedia.org/'
-    link = f'{wiki_url}w/api.php?{payload}'
-    r = http.request('GET', link)
-    obj = json.loads(r.data)
-
-    wiki_page = {}
-
-    if len(obj['query']['search']) > 0:
-        first_result = obj['query']['search'][0]
-        page_title = str.replace(first_result['title'], ' ', '_')
-        wiki_page['url'] = f'https://en.wikipedia.org/wiki/{page_title}'
-        wiki_page['snippet'] = first_result['snippet']
-
-        page_id = str(first_result["pageid"])
-
-        payload = {
-            'action': 'query',
-            'prop': 'pageimages',
-            'titles': first_result['title'],
-            'format': 'json',
-            'pithumbsize': 200,
-        }
-
-        payload = urlencode(payload, quote_via=urllib.parse.quote)
-        link = f'{wiki_url}w/api.php?{payload}'
-        r = http.request('GET', link)
-
-        obj = json.loads(r.data)
-        if len(obj['query']['pages']) > 0:
-            try:
-                wiki_page['image'] = obj['query']['pages'][page_id]['thumbnail']['source']
-            except:
-                wiki_page['image'] = "#"
-
-    return wiki_page
 
 
 if __name__ == '__main__':
