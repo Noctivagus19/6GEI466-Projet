@@ -32,21 +32,30 @@
       speed : <code id="speed"></code>
       </p>
 
+    <p>In the last hour, the ISS passed over:</p>
+    {% for position in positions %}
+        <ul>
+            <li>{{position['location']}} Long: {{ position['longitude'] }} Lat: {{ position['latitude'] }}</li>
+        </ul>
+    {% endfor %}
+
     There is currently <strong>{{ astros|length }} astronauts</strong> in the International Space Station:
     <ul>
       {% for astro in astros %}
-      <img src="{{ astro.wiki_page.image }}" >
-      
-      <li><a href="{{ astro.wiki_page.url }}">{{ astro.wiki_page.snippet|safe }}...</a></li>
-      
+        {% if astro.wiki_page.image %}
+            <img src="{{ astro.wiki_page.image }}">
+        {% endif %}
+        <li><a href="{{ astro.wiki_page.url }}">{{ astro.wiki_page.snippet|safe }}...</a></li>
       {% endfor %}
     </ul>
 
-    {% if issRisetimes %}
-        Votre position géographique: {{ infoLocation }}<br>
+    {% if pass_time %}
+        Votre position géographique: {{ pass_time.location.city }}, {{ pass_time.location.region }}, {{ pass_time.location.city }}<br>
         La station ISS passera au dessus de votre position géographique dans les moment suivants: <br>
-        {% for risetime in issRisetimes %}
-        <li><span>{{ risetime|safe }}...</span></li>
+        {% for rise_time in pass_time.rise_time %}
+            {% for key, value in rise_time.items() %}
+               <li><span>{{ value|format_datetime }}</span></li>
+            {% endfor %}
         {% endfor %}
     {% endif %}
 
