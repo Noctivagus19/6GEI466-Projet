@@ -35,7 +35,10 @@
     There is currently <strong>{{ astros|length }} astronauts</strong> in the International Space Station:
     <ul>
       {% for astro in astros %}
+      <img src="{{ astro.wiki_page.image }}" >
+      
       <li><a href="{{ astro.wiki_page.url }}">{{ astro.wiki_page.snippet|safe }}...</a></li>
+      
       {% endfor %}
     </ul>
 
