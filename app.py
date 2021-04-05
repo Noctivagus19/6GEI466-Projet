@@ -39,7 +39,7 @@ def index():
     r = http.request('GET', '127.0.0.1:8080/api/v1/iss/astronauts')
     iss_astronauts = json.loads(r.data)
 
-    for astro in obj["people"]:
+    for astro in iss_astronauts:
         if astro["craft"] == 'ISS':
             astro['wiki_page'] = search_wikipedia(astro['name'])
             iss_astronauts.append(astro)
