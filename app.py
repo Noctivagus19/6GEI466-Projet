@@ -43,7 +43,7 @@ def index():
         if astro["craft"] == 'ISS':
             astro['wiki_page'] = search_wikipedia(astro['name'])
             iss_astronauts.append(astro)
-            
+
     return render_template(
         'accueil.html',
         issLon=longitude,
@@ -57,7 +57,6 @@ def index():
 @app.route('/position/', methods=['GET'])
 def geoloc():
     return render_template('position.html')
-
 
 
 def search_wikipedia(term):
@@ -86,11 +85,11 @@ def search_wikipedia(term):
         page_id = str(first_result["pageid"])
 
         payload = {
-        'action': 'query',
-        'prop': 'pageimages',
-        'titles': first_result['title'],
-        'format': 'json',
-        'pithumbsize': 200,
+            'action': 'query',
+            'prop': 'pageimages',
+            'titles': first_result['title'],
+            'format': 'json',
+            'pithumbsize': 200,
         }
 
         payload = urlencode(payload, quote_via=urllib.parse.quote)
@@ -99,7 +98,10 @@ def search_wikipedia(term):
 
         obj = json.loads(r.data)
         if len(obj['query']['pages']) > 0:
-            wiki_page['image'] = obj['query']['pages'][page_id]['thumbnail']['source']
+            try:
+                wiki_page['image'] = obj['query']['pages'][page_id]['thumbnail']['source']
+            except:
+                wiki_page['image'] = "#"
 
     return wiki_page
 
