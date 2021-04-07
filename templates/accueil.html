@@ -10,13 +10,24 @@
     </style>
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
     <title>OpenLayers example</title>
+      <script>
+          var points = [];
+          {% set iss = namespace(lon=0) %}
+          {% set iss = namespace(lat=0) %}
+
+          {% for position in positions %}
+            points.push([{{ position['longitude'] }},{{ position['latitude'] }}])
+            {% set iss.lon = position['longitude'] %}
+            {% set iss.lat = position['latitude'] %}
+          {% endfor %}
+      </script>
   </head>
-  <body>
+  <body onload="drawTrajectory(points);">
     <h2>ISS current position above the Earth</h2>
     <div id="map" class="map"></div>
     <div id="coords">Latitude:  Longitude:</div>
-    <input type="hidden" id="issLon" name="issLon" value="{{ issLon }}">
-    <input type="hidden" id="issLat" name="issLat" value="{{ issLat }}">
+    <input type="hidden" id="issLon" name="issLon" value="{{ iss.lon }}">
+    <input type="hidden" id="issLat" name="issLat" value="{{ iss.lat }}">
 
 
     <label for="track">
@@ -61,5 +72,6 @@
 
     <script src="/static/scripts/openLayers.js"></script>
     <script type="module" src="/static/scripts/geoloc.js"></script>
+    <script src="/static/scripts/trajectory.js"></script>
   </body>
 </html>
