@@ -1,13 +1,26 @@
 <!doctype html>
 <html lang="fr">
   <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="">
+      <meta name="author" content="">
+
+      <title>ISS Tracker</title>
+
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
+
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+      <link href="{{ url_for('static', filename='css/fontawesome-free/css/all.min.css') }}" rel="stylesheet"
+          type="text/css">
+
+      <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
       <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet" type="text/css">
-    <title>ISS Tracker</title>
+
       <script>
           var points = [];
           {% set iss = namespace(lon=0) %}
@@ -20,56 +33,120 @@
           {% endfor %}
       </script>
   </head>
-  <body onload="drawTrajectory(points);">
-    <h2>ISS current position above the Earth</h2>
-    <div id="map" class="map"></div>
-    <div id="coords">Latitude:  Longitude:</div>
-    <input type="hidden" id="issLon" name="issLon" value="{{ iss.lon }}">
-    <input type="hidden" id="issLat" name="issLat" value="{{ iss.lat }}">
+  <body onload="drawTrajectory(points); activateTracking();">
+  <div id="wrapper">
+      <div id="content-wrapper" class="d-flex flex-column">
+          <div id="content">
+              <!-- Topbar -->
+              <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                  <!-- Sidebar Toggle (Topbar) -->
+                  <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                  </button>
+                  <h2 class="h3 mb-0 text-gray-800 mr-auto">ISS current position above the Earth</h2>
+              </nav>
 
+              <div class="container-fluid">
+                  <div class="row">
+                      <div class="col-md-12">
+                          <div id="map" class="map"></div>
+                          <div id="coords">Latitude:  Longitude:</div>
+                          <input type="hidden" id="issLon" name="issLon" value="{{ iss.lon }}">
+                          <input type="hidden" id="issLat" name="issLat" value="{{ iss.lat }}">
 
-    <label for="track">
-      Afficher ma position
-      <input id="track" type="checkbox"/>
-     </label> Latitude : <code id="latMyPosition"></code>&nbsp;&nbsp;
-     </label> Longitude : <code id="lonMyPosition"></code>
-      <p>
-      position accuracy : <code id="accuracy"></code>&nbsp;&nbsp;
-      altitude : <code id="altitude"></code>&nbsp;&nbsp;
-      altitude accuracy : <code id="altitudeAccuracy"></code>&nbsp;&nbsp;
-      heading : <code id="heading"></code>&nbsp;&nbsp;
-      speed : <code id="speed"></code>
-      </p>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12">
+                          <label for="track">
+                              <img src="{{ url_for('static', filename='img/mark_position.png') }}">
+                              <span>Informations sur votre position</span><br>
+                              <input id="track" type="hidden"/>
+                              Latitude : <code id="latMyPosition"></code>&nbsp;&nbsp;
+                              Longitude : <code id="lonMyPosition"></code>
+                              <p>
+                              position accuracy : <code id="accuracy"></code>&nbsp;&nbsp;
+                              altitude : <code id="altitude"></code>&nbsp;&nbsp;
+                              altitude accuracy : <code id="altitudeAccuracy"></code>&nbsp;&nbsp;
+                              heading : <code id="heading"></code>&nbsp;&nbsp;
+                              speed : <code id="speed"></code>
+                              </p>
+                          </label>
+                      </div>
+                  </div>
 
-    <p>In the last hour, the ISS passed over:</p>
-    {% for position in positions %}
-        <ul>
-            <li>{{position['location']}} Long: {{ position['longitude'] }} Lat: {{ position['latitude'] }}</li>
-        </ul>
-    {% endfor %}
+                  <div class="row">
+                      <div class="col-md-6">
+                          <table class="table table-hover" id="tbl_pass_time">
+                              {% if pass_time %}
+                              <h4>Votre position géographique: {{ pass_time.location.city }}, {{ pass_time.location.region }}, {{ pass_time.location.city }}</h4>
+                              <thead>
+                                  <tr>
+                                      <th>La station ISS passera au dessus de votre position géographique dans les moment suivants:</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                {% for rise_time in pass_time.rise_time %}
+                                    {% for key, value in rise_time.items() %}
+                                        <tr><td>{{ value|format_datetime }}</td></tr>
+                                    {% endfor %}
+                                {% endfor %}
+                              </tbody>
+                              {% endif %}
+                          </table>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6">
+                          <table class="table table-hover" id="tbl_positions">
+                              <thead>
+                                  <tr>
+                                      <h4>In the last hour, the ISS passed over:</h4>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                    {% for position in positions %}
+                                    <tr>
+                                        <td>{{position['location']}} Long: {{ position['longitude'] }} Lat: {{ position['latitude'] }}</td>
+                                    </tr>
+                                  {% endfor %}
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12">
+                          <h4>There is currently <strong>{{ astros|length }} astronauts</strong> in the International Space Station:</h4>
+                          <table id="tbl_astros" class="table table-hover">
+                              <thead>
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Page Wikipedia</th>
+                                </tr>
+                              </thead>
+                              {% for astro in astros %}
+                              <tr>
+                                  <td>
+                                      {% if astro.wiki_page.image %}
+                                      <img src="{{ astro.wiki_page.image }}">
+                                      {% endif %}
+                                  </td>
+                                  <td>
+                                      <a href="{{ astro.wiki_page.url }}">{{ astro.wiki_page.snippet|safe }}...</a>
+                                  </td>
+                              </tr>
+                              {% endfor %}
+                          </table>
+                      </div>
+                  </div>
+                  <script src="/static/scripts/openLayers.js"></script>
+                  <script src="/static/scripts/geoloc.js"></script>
+                  <script src="/static/scripts/trajectory.js"></script>
 
-    There is currently <strong>{{ astros|length }} astronauts</strong> in the International Space Station:
-    <ul>
-      {% for astro in astros %}
-        {% if astro.wiki_page.image %}
-            <img src="{{ astro.wiki_page.image }}">
-        {% endif %}
-        <li><a href="{{ astro.wiki_page.url }}">{{ astro.wiki_page.snippet|safe }}...</a></li>
-      {% endfor %}
-    </ul>
+              </div>
 
-    {% if pass_time %}
-        Votre position géographique: {{ pass_time.location.city }}, {{ pass_time.location.region }}, {{ pass_time.location.city }}<br>
-        La station ISS passera au dessus de votre position géographique dans les moment suivants: <br>
-        {% for rise_time in pass_time.rise_time %}
-            {% for key, value in rise_time.items() %}
-               <li><span>{{ value|format_datetime }}</span></li>
-            {% endfor %}
-        {% endfor %}
-    {% endif %}
-
-    <script src="/static/scripts/openLayers.js"></script>
-    <script type="module" src="/static/scripts/geoloc.js"></script>
-    <script src="/static/scripts/trajectory.js"></script>
+          </div>
+      </div>
+  </div>
   </body>
 </html>

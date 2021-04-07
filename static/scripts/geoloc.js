@@ -19,6 +19,10 @@ el('track').addEventListener('change', function () {
   geolocation.setTracking(this.checked);
 });
 
+function activateTracking(){
+    geolocation.setTracking(true);
+}
+
 // update the HTML page when the position changes.
 geolocation.on('change', function () {
   el('accuracy').innerText = geolocation.getAccuracy() + ' [m]';
