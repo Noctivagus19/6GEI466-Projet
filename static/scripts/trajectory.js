@@ -1,4 +1,4 @@
-function checkCrossMeridian(points){
+function drawTrajectory(points){
     pointsToRender = []
 
      for (var i = 0; i < points.length; i++) {
@@ -9,7 +9,6 @@ function checkCrossMeridian(points){
 
             if (Math.abs(startPoint[0]-endPoint[0]) > 180) {
                 var midY = (startPoint[1] + endPoint[1]) / 2
-
                 var temp_endpoint = [startPoint[0], midY];
                 var temp_startpoint = [startPoint[0], midY];
 
@@ -22,17 +21,17 @@ function checkCrossMeridian(points){
                 }
 
                  pointsToRender.push(temp_endpoint);
-                 drawTrajectory(pointsToRender);
+                 drawLine(pointsToRender);
                  pointsToRender = [];
                  pointsToRender.push(temp_startpoint);
             }
         }
     }
-    drawTrajectory(pointsToRender);
+    drawLine(pointsToRender);
 }
 
 
-function drawTrajectory(points){
+function drawLine(points){
 
     for (var i = 0; i < points.length; i++) {
         points[i] = ol.proj.transform(points[i], 'EPSG:4326', 'EPSG:3857');
