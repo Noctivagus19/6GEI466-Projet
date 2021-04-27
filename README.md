@@ -1,4 +1,4 @@
-# 6GEI466_Lab_2
+# 6GEI466_Projet
 by Jean-Michel Plourde, Jean-Philippe Lapointe and Joel Villeneuve
 
 ## About The Project
@@ -8,6 +8,7 @@ Project repo for 6GEI466 - Applications réseaux et sécurité informatique.
 ### Built With
 
 * [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+* [MongoDB](https://www.mongodb.com/)
 
 
 <!-- GETTING STARTED -->
@@ -17,6 +18,7 @@ Project repo for 6GEI466 - Applications réseaux et sécurité informatique.
 
 * python3.9
 * flask1.1.x
+* mongodb community edition
 
 ### Installation
 
@@ -59,7 +61,11 @@ Project repo for 6GEI466 - Applications réseaux et sécurité informatique.
    
 <!-- USAGE EXAMPLES -->
 ## Usage
-1. Launch the server
+1.Make sure MongoDB deamon is running
+   ```sh
+   sudo systemctl start mongod
+   ```
+3. Launch the app server
    ```sh
    flask run
    ```
@@ -67,4 +73,3 @@ Project repo for 6GEI466 - Applications réseaux et sécurité informatique.
    ```sh
    localhost:5000/
    ```
-
