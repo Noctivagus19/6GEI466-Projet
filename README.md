@@ -19,6 +19,7 @@ Project repo for 6GEI466 - Applications réseaux et sécurité informatique.
 * python3.9
 * flask1.1.x
 * mongodb community edition
+* [6GEI466_API](https://github.com/giant995/6GEI466_API) installed for this platform to work
 
 ### Installation
 
@@ -38,21 +39,21 @@ Project repo for 6GEI466 - Applications réseaux et sécurité informatique.
      https://github.com/giant995/6GEI466_Projet/archive/main.zip
      ```
    
-2. Go into the project folder
+1. Go into the project folder
    ```sh
    cd 6GEI466_Projet
    ```
  
-3. Create a virtual environment
+1. Create a virtual environment
    ```sh
    python3 -m venv myvenv
    source myvenv/bin/activate
    ```
-4. Install pip dependencies from `requirements.txt`
+1. Install pip dependencies from `requirements.txt`
    ```sh
    python3 -m pip install -r requirements.txt
    ```
-5. Export environment variables
+1. Export environment variables
    ```sh
    export FLASK_ENV=development
    export FLASK_APP=app.py
@@ -61,15 +62,15 @@ Project repo for 6GEI466 - Applications réseaux et sécurité informatique.
    
 <!-- USAGE EXAMPLES -->
 ## Usage
-1.Make sure MongoDB deamon is running
+1. Make sure MongoDB deamon is running
    ```sh
    sudo systemctl start mongod
    ```
-3. Launch the app server
+1. Launch the app server
    ```sh
    flask run
    ```
-2. Visit
+1. Visit
    ```sh
    localhost:5000/
    ```
