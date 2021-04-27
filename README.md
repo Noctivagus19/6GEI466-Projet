@@ -18,7 +18,6 @@ Project repo for 6GEI466 - Applications réseaux et sécurité informatique.
 
 * python3.9
 * flask1.1.x
-* mongodb community edition
 * [6GEI466_API](https://github.com/giant995/6GEI466_API) installed for this platform to work
 
 ### Installation
@@ -62,10 +61,6 @@ Project repo for 6GEI466 - Applications réseaux et sécurité informatique.
    
 <!-- USAGE EXAMPLES -->
 ## Usage
-1. Make sure MongoDB deamon is running
-   ```sh
-   sudo systemctl start mongod
-   ```
 1. Launch the app server
    ```sh
    flask run
